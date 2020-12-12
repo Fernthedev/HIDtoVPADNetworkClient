@@ -131,7 +131,7 @@
 		<dependency>
 			<groupId>com.github.strikerx3</groupId>
 			<artifactId>jxinput</artifactId>
-			<version>1eb4087</version>    <!-- JXInput 0.7 -->
+			<version>445e5d0</version>    <!-- JXInput 0.7 -->
 		</dependency>
 		<dependency>
 			<groupId>com.github.QuarkTheAwesome</groupId>
@@ -141,7 +141,7 @@
 		<dependency>
 			<groupId>org.hid4java</groupId>
 			<artifactId>hid4java</artifactId>
-			<version>0.4.0</version>
+			<version>0.7.0</version>
 		</dependency>
 	</dependencies>
 </project>

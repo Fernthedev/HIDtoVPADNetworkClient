@@ -31,10 +31,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.ivan.xinput.XInputDevice;
-import com.ivan.xinput.XInputDevice14;
-import com.ivan.xinput.exceptions.XInputNotLoadedException;
 
+import com.github.strikerx3.jxinput.XInputDevice;
+import com.github.strikerx3.jxinput.XInputDevice14;
+import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
 import lombok.Synchronized;
 import lombok.extern.java.Log;
 import net.ash.HIDToVPADNetworkClient.controller.Controller;
@@ -215,16 +215,14 @@ public final class ControllerManager {
     }
 
     private static Map<String, ControllerType> detectLinuxControllers() {
-        Map<String, ControllerType> result = new HashMap<String, ControllerType>();
+        Map<String, ControllerType> result = new HashMap<>();
         if (!Settings.ControllerFiltering.getFilterState(Settings.ControllerFiltering.Type.LINUX)) return result;
 
         File devInput = new File("/dev/input");
         if (!devInput.exists()) return result;
 
-        File[] linuxControllers = devInput.listFiles(new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.startsWith("js"); // js0, js1, etc...
-            }
+        File[] linuxControllers = devInput.listFiles((dir, name) -> {
+            return name.startsWith("js"); // js0, js1, etc...
         });
 
         for (File controller : linuxControllers) {

@@ -24,12 +24,12 @@ package net.ash.HIDToVPADNetworkClient.controller;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 
-import com.ivan.xinput.XInputAxes;
-import com.ivan.xinput.XInputButtons;
-import com.ivan.xinput.XInputComponents;
-import com.ivan.xinput.XInputDevice;
-import com.ivan.xinput.exceptions.XInputNotLoadedException;
 
+import com.github.strikerx3.jxinput.XInputAxes;
+import com.github.strikerx3.jxinput.XInputButtons;
+import com.github.strikerx3.jxinput.XInputComponents;
+import com.github.strikerx3.jxinput.XInputDevice;
+import com.github.strikerx3.jxinput.exceptions.XInputNotLoadedException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -107,12 +107,12 @@ public class XInputController extends Controller {
             axesData |= Utilities.signedShortToByte(axes.lxRaw) << 24;
             axesData |= Utilities.signedShortToByte(axes.lyRaw) << 16;
             axesData |= Utilities.signedShortToByte(axes.rxRaw) << 8;
-            axesData |= Utilities.signedShortToByte(axes.ryRaw) << 0;
+            axesData |= Utilities.signedShortToByte(axes.ryRaw);
 
             short axesDataShoulderButtons = 0;
 
             axesDataShoulderButtons |= axes.ltRaw << 8;
-            axesDataShoulderButtons |= axes.rtRaw << 0;
+            axesDataShoulderButtons |= axes.rtRaw;
 
             buttonState |= axesDataShoulderButtons << 16;
             data.putInt(axesData).putInt(buttonState);

@@ -46,12 +46,12 @@ class Hid4JavaHidDevice implements HidDevice {
 
     @Override
     public short getVendorId() {
-        return myDevice.getVendorId();
+        return (short) myDevice.getVendorId();
     }
 
     @Override
     public short getProductId() {
-        return myDevice.getProductId();
+        return (short) myDevice.getProductId();
     }
 
     @Override
