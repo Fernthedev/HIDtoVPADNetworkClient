@@ -23,5 +23,5 @@
 package net.ash.HIDToVPADNetworkClient.util;
 
 public interface MessageBoxListener {
-    public void showMessageBox(MessageBox msgBox);
+    void showMessageBox(MessageBox msgBox);
 }

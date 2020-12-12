@@ -36,7 +36,7 @@ import net.ash.HIDToVPADNetworkClient.util.Utilities;
 
 @Log
 public final class ActiveControllerManager implements Runnable {
-    private static ActiveControllerManager instance = new ActiveControllerManager();
+    private static final ActiveControllerManager instance = new ActiveControllerManager();
     private final Map<Controller, NetworkHIDDevice> activeControllers = new HashMap<Controller, NetworkHIDDevice>();
 
     private ActiveControllerManager() {

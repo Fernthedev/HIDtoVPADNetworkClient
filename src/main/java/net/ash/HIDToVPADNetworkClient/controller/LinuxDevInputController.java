@@ -21,20 +21,15 @@
  *******************************************************************************/
 package net.ash.HIDToVPADNetworkClient.controller;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-
 import lombok.Getter;
 import net.ash.HIDToVPADNetworkClient.exeption.ControllerInitializationFailedException;
 import net.ash.HIDToVPADNetworkClient.util.Utilities;
 
+import java.io.*;
+
 public class LinuxDevInputController extends Controller implements Runnable {
     public static final int NUM_SUPPORTED_AXIS = 10; // possibly off-by-one
-    public static final int CONTROLLER_DATA_SIZE = (Long.SIZE / Byte.SIZE) + ((Byte.SIZE / Byte.SIZE) * NUM_SUPPORTED_AXIS);
+    public static final int CONTROLLER_DATA_SIZE = (Long.SIZE / Byte.SIZE) + (NUM_SUPPORTED_AXIS);
 
     private static final byte JS_EVENT_BUTTON = 0x01;
     private static final byte JS_EVENT_INIT = (byte) 0x80;
@@ -48,7 +43,7 @@ public class LinuxDevInputController extends Controller implements Runnable {
     private String name;
 
     private long buttonState = 0;
-    private byte[] axisState = new byte[NUM_SUPPORTED_AXIS];
+    private final byte[] axisState = new byte[NUM_SUPPORTED_AXIS];
 
     public LinuxDevInputController(String identifier) throws ControllerInitializationFailedException {
         super(ControllerType.LINUX, identifier);
@@ -74,7 +69,7 @@ public class LinuxDevInputController extends Controller implements Runnable {
         if (VID == 0 || PID == 0) {
             VID = ((short) (identifier.hashCode() & 0xFFFF));
             PID = ((short) ((identifier.hashCode() >> (Short.SIZE / Byte.SIZE)) & 0xFFFF));
-            System.out.println("[LinuxDevInputController] " + identifier.toString() + " fakevid: " + Integer.toHexString((int) getVID() & 0xFFFF) + " fakepid: "
+            System.out.println("[LinuxDevInputController] " + identifier + " fakevid: " + Integer.toHexString((int) getVID() & 0xFFFF) + " fakepid: "
                     + Integer.toHexString((int) getPID() & 0xFFFF));
         }
 
@@ -101,15 +96,13 @@ public class LinuxDevInputController extends Controller implements Runnable {
         FileReader vidGet = new FileReader(sysfs_path + "/id/vendor");
         vidGet.read(vidBuf);
         vidGet.close();
-        short vid = Short.parseShort(new String(vidBuf).trim(), 16);
-        this.VID = vid;
+        this.VID = Short.parseShort(new String(vidBuf).trim(), 16);
 
         char[] pidBuf = new char[6];
         FileReader pidGet = new FileReader(sysfs_path + "/id/product");
         pidGet.read(pidBuf);
         pidGet.close();
-        short pid = Short.parseShort(new String(pidBuf).trim(), 16);
-        this.PID = pid;
+        this.PID = Short.parseShort(new String(pidBuf).trim(), 16);
     }
 
     @Override
@@ -144,10 +137,10 @@ public class LinuxDevInputController extends Controller implements Runnable {
 
             if (value == 0) {
                 // Clear bit with button number
-                buttonState &= ~(1 << number);
+                buttonState &= ~(1L << number);
             } else {
                 // Set bit with button number
-                buttonState |= (1 << number);
+                buttonState |= (1L << number);
             }
         } else if (type == JS_EVENT_AXIS) {
             if (number >= NUM_SUPPORTED_AXIS) {
@@ -163,12 +156,10 @@ public class LinuxDevInputController extends Controller implements Runnable {
         byte[] newData = new byte[CONTROLLER_DATA_SIZE];
         // Copy in button states
         for (int i = 0; i < (Long.SIZE / Byte.SIZE); i++) {
-            newData[i] = (byte) ((buttonState >> (i * (Byte.SIZE / Byte.SIZE))) & 0xFF);
+            newData[i] = (byte) ((buttonState >> (i)) & 0xFF);
         }
         // Copy in axis data
-        for (int i = (Long.SIZE / Byte.SIZE); i < CONTROLLER_DATA_SIZE; i++) {
-            newData[i] = axisState[i - (Long.SIZE / Byte.SIZE)];
-        }
+        System.arraycopy(axisState, 0, newData, Long.SIZE / Byte.SIZE, CONTROLLER_DATA_SIZE - 8);
 
         return newData;
     }
@@ -182,7 +173,7 @@ public class LinuxDevInputController extends Controller implements Runnable {
     public void destroyDriver() {
         try {
             controller.close();
-        } catch (IOException e) {
+        } catch (IOException ignored) {
         }
     }
 

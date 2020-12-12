@@ -30,11 +30,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public final class MessageBoxManager implements Runnable {
     private static final Queue<MessageBox> messageBoxQueue = new ConcurrentLinkedQueue<MessageBox>();
-    private static List<MessageBoxListener> newList = Collections.synchronizedList(new ArrayList<MessageBoxListener>());
-    private static Object listenerListLock = new Object();
+    private static final List<MessageBoxListener> newList = Collections.synchronizedList(new ArrayList<MessageBoxListener>());
+    private static final Object listenerListLock = new Object();
     private static boolean threadStarted = false;
 
-    private final static MessageBoxManager instance = new MessageBoxManager();
+    private static final MessageBoxManager instance = new MessageBoxManager();
 
     private MessageBoxManager() {
 

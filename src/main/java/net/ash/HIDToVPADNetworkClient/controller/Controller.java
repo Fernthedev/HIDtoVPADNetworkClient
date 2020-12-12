@@ -21,14 +21,14 @@
  *******************************************************************************/
 package net.ash.HIDToVPADNetworkClient.controller;
 
-import java.util.Arrays;
-
 import lombok.Getter;
 import lombok.Synchronized;
 import net.ash.HIDToVPADNetworkClient.exeption.ControllerInitializationFailedException;
 import net.ash.HIDToVPADNetworkClient.manager.ControllerManager;
 import net.ash.HIDToVPADNetworkClient.util.Settings;
 import net.ash.HIDToVPADNetworkClient.util.Utilities;
+
+import java.util.Arrays;
 
 /**
  * Main controller interface, extended by controller drivers. <br>
@@ -113,8 +113,8 @@ public abstract class Controller implements Runnable {
      * Sets up the driver. <br>
      * During this method call, a connection will be made with the controller hardware (if required).
      * 
-     * @param arg
-     *            Driver-specific init argument, see {@link ControllerManager} and {@link ControllerDetector}.
+     * @param identifier
+     *            Driver-specific init argument, see {@link ControllerManager}.
      * @return Whether initialization was successful.
      */
     public abstract boolean initController(String identifier);
@@ -133,24 +133,21 @@ public abstract class Controller implements Runnable {
     public abstract void destroyDriver();
 
     private void endThread() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                setActive(false);
+        new Thread(() -> {
+            setActive(false);
 
+            synchronized (shutdownLock) {
+                shutdown = true;
+            }
+
+            boolean done = false;
+            int i = 0;
+            while (!done) {
                 synchronized (shutdownLock) {
-                    shutdown = true;
+                    done = shutdownDone;
                 }
-
-                boolean done = false;
-                int i = 0;
-                while (!done) {
-                    synchronized (shutdownLock) {
-                        done = shutdownDone;
-                    }
-                    Utilities.sleep(50);
-                    if (i++ > 50) System.out.println("Thread doesn't stop!!");
-                }
+                Utilities.sleep(50);
+                if (i++ > 50) System.out.println("Thread doesn't stop!!");
             }
         }).start();
     }

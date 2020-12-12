@@ -95,7 +95,7 @@ public class GuiOptionsWindow extends JPanel {
         add(tabPane);
     }
 
-    private class ControllerTab extends Tab {
+    private static class ControllerTab extends Tab {
         private static final long serialVersionUID = 1L;
 
         private final ControllerFilteringList cFilterList;
@@ -215,7 +215,7 @@ public class GuiOptionsWindow extends JPanel {
         }
     }
 
-    private class InfoTab extends Tab {
+    private static class InfoTab extends Tab {
         private static final long serialVersionUID = 1L;
 
         private final JTextArea infoText;
@@ -254,7 +254,7 @@ public class GuiOptionsWindow extends JPanel {
         }
     }
 
-    private abstract class Tab extends JPanel {
+    private abstract static class Tab extends JPanel {
         private static final long serialVersionUID = 1L;
 
         public abstract void updateTab();

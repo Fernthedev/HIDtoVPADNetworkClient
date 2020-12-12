@@ -59,16 +59,14 @@ public class GuiControllerListItem extends JPanel implements ActionListener {
         add(checkbox);
 
         int delay = 100; // milliseconds
-        ActionListener taskPerformer = new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                if (hasConfigCache != controller.hasConfig()) {
-                    hasConfigCache = controller.hasConfig();
-                    checkIfDisplayNoConfigMessage();
-                }
-
-                checkbox.setEnabled(NetworkManager.getInstance().isConnected());
-                checkbox.setSelected(controller.isActive());
+        ActionListener taskPerformer = evt -> {
+            if (hasConfigCache != controller.hasConfig()) {
+                hasConfigCache = controller.hasConfig();
+                checkIfDisplayNoConfigMessage();
             }
+
+            checkbox.setEnabled(NetworkManager.getInstance().isConnected());
+            checkbox.setSelected(controller.isActive());
         };
         new Timer(delay, taskPerformer).start();
     }

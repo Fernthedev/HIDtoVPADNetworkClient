@@ -89,7 +89,7 @@ public final class Utilities {
      */
     public static boolean[] stringToBoolArray(String string) {
         String[] strings = string.replace("[", "").replace("]", "").split(", ");
-        boolean result[] = new boolean[strings.length];
+        boolean[] result = new boolean[strings.length];
         for (int i = 0; i < result.length; i++) {
             result[i] = Boolean.parseBoolean(strings[i]);
         }

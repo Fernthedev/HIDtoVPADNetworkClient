@@ -21,13 +21,13 @@
  *******************************************************************************/
 package net.ash.HIDToVPADNetworkClient;
 
-import javax.swing.SwingUtilities;
-
 import net.ash.HIDToVPADNetworkClient.gui.GuiMain;
 import net.ash.HIDToVPADNetworkClient.manager.ActiveControllerManager;
 import net.ash.HIDToVPADNetworkClient.network.NetworkManager;
 import net.ash.HIDToVPADNetworkClient.util.MessageBoxManager;
 import net.ash.HIDToVPADNetworkClient.util.Settings;
+
+import javax.swing.*;
 
 /* Ash's todo list
  * TODO finish HidController
@@ -43,12 +43,7 @@ public final class Main {
             e.printStackTrace();
             fatal();
         }
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                GuiMain.getInstance();
-
-            }
-        });
+        SwingUtilities.invokeLater(GuiMain::getInstance);
 
         MessageBoxManager.addMessageBoxListener(GuiMain.getInstance());
     }

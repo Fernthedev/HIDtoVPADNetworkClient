@@ -41,26 +41,21 @@
 	</profiles>
 
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<!-- Band-aid over a knife wound, I know. Restructure is later. -->
-		<resources>
-			<resource>
-				<directory>resources</directory>
-			</resource>
-		</resources>
 		<defaultGoal>clean package</defaultGoal>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
+				<version>3.8.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<!-- Generate a jar with dependencies -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.3.0</version>
 				<executions>
 					<execution>
 						<id>make-assembly</id>
@@ -79,7 +74,7 @@
 		                </configuration>
 						<phase>package</phase>
 						<goals>
-							<goal>attached</goal>
+							<goal>single</goal>
 						</goals>
 					</execution>
 					<execution>
@@ -99,15 +94,16 @@
                         </configuration>
                         <phase>package</phase>
                         <goals>
-                            <goal>attached</goal>
+                            <goal>single</goal>
                         </goals>
                     </execution>
 				</executions>
 			</plugin>
 			<!-- Disable the default jar output -->
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3.1</version>
+				<version>3.2.0</version>
 				<executions>
 					<execution>
 						<id>default-jar</id>
@@ -129,7 +125,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.16.12</version>
+			<version>1.18.2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

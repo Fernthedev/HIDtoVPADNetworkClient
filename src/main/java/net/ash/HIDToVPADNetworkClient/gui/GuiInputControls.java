@@ -21,25 +21,14 @@
  *******************************************************************************/
 package net.ash.HIDToVPADNetworkClient.gui;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
-
 import lombok.Getter;
 import net.ash.HIDToVPADNetworkClient.manager.ControllerManager;
 import net.ash.HIDToVPADNetworkClient.network.NetworkManager;
 import net.ash.HIDToVPADNetworkClient.util.Settings;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
 
 public final class GuiInputControls extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -61,30 +50,11 @@ public final class GuiInputControls extends JPanel {
 
         final JButton scanButton = new JButton("Scan for Controllers");
         scanButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        scanButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        ControllerManager.detectControllers();
-                    }
-                });
-            }
-        });
+        scanButton.addActionListener(e -> SwingUtilities.invokeLater(ControllerManager::detectControllers));
 
         final JButton optionsButton = new JButton("Options");
         optionsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        optionsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        GuiOptionsWindow.showWindow(GuiMain.getInstance());
-                    }
-                });
-            }
-        });
+        optionsButton.addActionListener(e -> SwingUtilities.invokeLater(() -> GuiOptionsWindow.showWindow(GuiMain.getInstance())));
 
         ipTextBox = new JTextField();
         ipTextBox.setColumns(14);
@@ -108,39 +78,28 @@ public final class GuiInputControls extends JPanel {
 
         add(Box.createVerticalGlue());
 
-        connectButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        Settings.setIpAddr(ipTextBox.getText());
-                        if (NetworkManager.getInstance().isReconnecting()) {
-
-                        } else {
-                            if (NetworkManager.getInstance().isConnected()) {
-                                NetworkManager.getInstance().disconnect();
-                            } else {
-                                NetworkManager.getInstance().connect(ipTextBox.getText());
-                            }
-                        }
-                    }
-                });
+        connectButton.addActionListener(e -> SwingUtilities.invokeLater(() -> {
+            Settings.setIpAddr(ipTextBox.getText());
+            if (!NetworkManager.getInstance().isReconnecting()) {
+                if (NetworkManager.getInstance().isConnected()) {
+                    NetworkManager.getInstance().disconnect();
+                } else {
+                    NetworkManager.getInstance().connect(ipTextBox.getText());
+                }
             }
-        });
+        }));
 
         int delay = 100; // milliseconds
-        ActionListener taskPerformer = new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                if (NetworkManager.getInstance().isReconnecting()) {
-                    connectButton.setText(RECONNECTING);
-                    connectButton.setEnabled(false);
-                } else if (NetworkManager.getInstance().isConnected()) {
-                    connectButton.setText(DISCONNECT);
-                    connectButton.setEnabled(true);
-                } else {
-                    connectButton.setText(CONNECT);
-                    connectButton.setEnabled(true);
-                }
+        ActionListener taskPerformer = evt -> {
+            if (NetworkManager.getInstance().isReconnecting()) {
+                connectButton.setText(RECONNECTING);
+                connectButton.setEnabled(false);
+            } else if (NetworkManager.getInstance().isConnected()) {
+                connectButton.setText(DISCONNECT);
+                connectButton.setEnabled(true);
+            } else {
+                connectButton.setText(CONNECT);
+                connectButton.setEnabled(true);
             }
         };
         new Timer(delay, taskPerformer).start();

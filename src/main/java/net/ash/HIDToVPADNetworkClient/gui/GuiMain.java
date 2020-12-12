@@ -24,7 +24,6 @@ package net.ash.HIDToVPADNetworkClient.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -45,9 +44,8 @@ public class GuiMain extends JPanel implements MessageBoxListener {
 
         GuiMain instance = new GuiMain();
 
-        JComponent newContentPane = instance;
-        newContentPane.setOpaque(true);
-        frame.setContentPane(newContentPane);
+        instance.setOpaque(true);
+        frame.setContentPane(instance);
 
         frame.pack();
         frame.setVisible(true);
@@ -64,7 +62,7 @@ public class GuiMain extends JPanel implements MessageBoxListener {
         add(rightSideControls, BorderLayout.LINE_END);
     }
 
-    public synchronized static GuiMain getInstance() {
+    public static synchronized GuiMain getInstance() {
         if (instance == null) {
             instance = createGUI();
         }

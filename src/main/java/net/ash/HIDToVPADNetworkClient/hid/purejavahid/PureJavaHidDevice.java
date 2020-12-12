@@ -36,7 +36,7 @@ import purejavahidapi.InputReportListener;
 @Log
 class PureJavaHidDevice implements HidDevice, InputReportListener {
     private purejavahidapi.HidDevice myDevice = null;
-    private final purejavahidapi.HidDeviceInfo myDeviceInfo;
+    private final HidDeviceInfo myDeviceInfo;
 
     private final Object dataLock = new Object();
     protected byte[] currentData = new byte[0];

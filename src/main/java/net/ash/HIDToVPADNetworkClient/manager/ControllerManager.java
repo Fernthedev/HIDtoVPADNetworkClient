@@ -53,7 +53,7 @@ import net.ash.HIDToVPADNetworkClient.util.Settings;
 
 @Log
 public final class ControllerManager {
-    private static final Map<String, Controller> attachedControllers = new HashMap<String, Controller>();
+    private static final Map<String, Controller> attachedControllers = new HashMap<>();
 
     private static boolean threwUnsatisfiedLinkError = false;
 
@@ -97,7 +97,7 @@ public final class ControllerManager {
         // Add attached devices!
         for (Entry<String, ControllerType> entry : connectedDevices.entrySet()) {
             String deviceIdentifier = entry.getKey();
-            boolean contains = false;
+            boolean contains;
             synchronized (attachedControllers) {
                 contains = attachedControllers.containsKey(deviceIdentifier);
             }
@@ -153,11 +153,11 @@ public final class ControllerManager {
 
     @Synchronized("attachedControllers")
     public static List<Controller> getAttachedControllers() {
-        return new ArrayList<Controller>(attachedControllers.values());
+        return new ArrayList<>(attachedControllers.values());
     }
 
     private static Map<String, ControllerType> detectHIDDevices() {
-        Map<String, ControllerType> connectedDevices = new HashMap<String, ControllerType>();
+        Map<String, ControllerType> connectedDevices = new HashMap<>();
         for (HidDevice info : HidManager.getAttachedControllers()) {
             String path = info.getPath();
             connectedDevices.put(path, ControllerType.HIDController);
@@ -167,7 +167,7 @@ public final class ControllerManager {
     }
 
     private static Map<String, ControllerType> detectXInputControllers() {
-        Map<String, ControllerType> result = new HashMap<String, ControllerType>();
+        Map<String, ControllerType> result = new HashMap<>();
         if (!Settings.ControllerFiltering.getFilterState(Settings.ControllerFiltering.Type.XINPUT)) return result;
 
         ControllerType type = ControllerType.XINPUT13;

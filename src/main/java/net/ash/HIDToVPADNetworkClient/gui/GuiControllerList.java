@@ -23,7 +23,6 @@ package net.ash.HIDToVPADNetworkClient.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,11 +51,7 @@ public class GuiControllerList extends JPanel {
         add(new JScrollPane(innerScrollPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER), BorderLayout.CENTER);
 
         int delay = 1000; // milliseconds
-        ActionListener taskPerformer = new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                updateControllerList();
-            }
-        };
+        ActionListener taskPerformer = evt -> updateControllerList();
         new Timer(delay, taskPerformer).start();
     }
 

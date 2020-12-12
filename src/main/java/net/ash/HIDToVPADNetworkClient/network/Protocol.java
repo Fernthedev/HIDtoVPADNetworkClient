@@ -33,7 +33,6 @@ import net.ash.HIDToVPADNetworkClient.controller.Controller;
 import net.ash.HIDToVPADNetworkClient.manager.ActiveControllerManager;
 import net.ash.HIDToVPADNetworkClient.util.MessageBox;
 import net.ash.HIDToVPADNetworkClient.util.MessageBoxManager;
-import net.ash.HIDToVPADNetworkClient.util.Utilities;
 
 @Log
 final class Protocol {
